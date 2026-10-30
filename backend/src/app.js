@@ -100,8 +100,24 @@ if (!config.isTest) {
 
 // 8. Global rate limiter + API routes (the health check stays reachable
 //    for uptime monitors even when an address is being limited)
-app.use((req, res, next) => (req.path === '/api/health' ? next() : globalLimiter(req, res, next)));
+app.use((req, res, next) =>
+  req.path === '/api/health' || req.path === '/health' ? next() : globalLimiter(req, res, next)
+);
+
+// Root: a plain status message so opening the API address in a browser
+// does not look like an error
+app.get('/', (_req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Sahajanand Electronics API is running',
+    data: { health: '/api/health' },
+  });
+});
+
 app.use('/api', routes);
+// Also serve the same routes without the /api prefix, so a storefront whose
+// VITE_API_URL was set without "/api" still works
+app.use(routes);
 
 // Top-level endpoints for standard checkout callers
 app.post('/create-order', paymentController.createOrder);
