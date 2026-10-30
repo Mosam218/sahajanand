@@ -1,0 +1,27 @@
+### REST Client API Tests (Requires the VS Code "REST Client" extension)
+
+@baseUrl = http://localhost:5000/api
+# Replace this token with an actual ID token obtained from your Firebase frontend
+@firebaseIdToken = your_firebase_id_token_here
+
+### 1. Login (Sync Firebase User with MongoDB)
+# This will verify the Firebase ID token and return your user profile from the database.
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+Authorization: Bearer {{firebaseIdToken}}
+
+###
+
+### 2. Get Current User Profile (Me)
+# Retrieves your user profile from MongoDB using the same Firebase ID token.
+GET {{baseUrl}}/auth/me
+Content-Type: application/json
+Authorization: Bearer {{firebaseIdToken}}
+
+###
+
+### 3. Logout
+# Logs the user out. (Note: Since we use Firebase tokens, logout revokes refresh tokens on the server, but your client frontend must also sign out of Firebase).
+POST {{baseUrl}}/auth/logout
+Content-Type: application/json
+Authorization: Bearer {{firebaseIdToken}}

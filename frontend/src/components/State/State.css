@@ -1,0 +1,6 @@
+.state { display: flex; align-items: center; justify-content: center; gap: 0.75rem; padding: 3rem 1rem; color: var(--ink-3); font-weight: 550; }
+.state--compact { padding: 1rem; justify-content: flex-start; }
+.state__spinner { width: 20px; height: 20px; border: 2.5px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: state-spin 0.8s linear infinite; }
+@keyframes state-spin { to { transform: rotate(360deg); } }
+.boot { min-height: 100vh; display: grid; place-items: center; padding: 2rem; }
+.boot .empty { max-width: 520px; }

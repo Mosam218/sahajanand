@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.*
+!.env.example
+uploads/*
+!uploads/.gitkeep
+logs/
+coverage/
+*.log
+.DS_Store
+dist/
+
+# Local development database (npm run dev:local)
+.localdb/

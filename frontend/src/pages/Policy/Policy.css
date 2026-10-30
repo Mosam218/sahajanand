@@ -1,0 +1,6 @@
+.policy { padding-bottom: var(--section); max-width: 860px; }
+.policy h1 { font-size: var(--fs-4); margin-bottom: 0.5rem; }
+.policy__date { font-size: var(--fs-0); margin-bottom: 1.5rem; }
+/* Shown exactly as the business typed it: line breaks kept, never parsed as HTML */
+.policy__text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--fs-2); color: var(--ink-2); line-height: 1.7; }
+.policy .empty { margin-top: 1.5rem; }

@@ -1,0 +1,148 @@
+.coupons-section { }
+
+.coupons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1rem;
+}
+
+.coupon-card {
+  display: flex;
+  align-items: stretch;
+  background: var(--coupon-bg);
+  color: #fff;
+  border-radius: var(--r-2);
+  overflow: hidden;
+  box-shadow: 0 4px 24px -6px rgba(0,0,0,0.25);
+  transition: transform 0.2s var(--ease), box-shadow 0.2s;
+  position: relative;
+}
+.coupon-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 140px;
+  background: rgba(255,255,255,0.05);
+  clip-path: ellipse(120px 200px at 120px 50%);
+  pointer-events: none;
+}
+.coupon-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -8px rgba(0,0,0,0.35);
+}
+
+/* Left strip */
+.coupon-card__left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1.2rem 1rem;
+  background: rgba(0,0,0,0.18);
+  min-width: 80px;
+  border-right: 2px dashed rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+
+.coupon-card__icon {
+  color: var(--coupon-accent, #fff);
+  opacity: 0.9;
+}
+
+.coupon-card__label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--coupon-accent, #fff);
+  text-align: center;
+  line-height: 1.2;
+}
+
+/* Body */
+.coupon-card__body {
+  flex: 1;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  justify-content: center;
+}
+
+.coupon-card__desc {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.95);
+  line-height: 1.35;
+}
+
+.coupon-card__min,
+.coupon-card__cat {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.65);
+}
+.coupon-card__cat strong { color: rgba(255,255,255,0.9); }
+
+/* Right — copy button */
+.coupon-card__right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  flex-shrink: 0;
+}
+
+.coupon-copy-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.6rem 1rem;
+  background: rgba(255,255,255,0.12);
+  border: 2px dashed rgba(255,255,255,0.5);
+  border-radius: var(--r-1);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  min-width: 100px;
+  text-align: center;
+}
+.coupon-copy-btn:hover {
+  background: rgba(255,255,255,0.22);
+  border-color: rgba(255,255,255,0.9);
+}
+.coupon-copy-btn--copied {
+  background: rgba(29, 122, 77, 0.35);
+  border-color: rgba(29, 122, 77, 0.7);
+}
+
+.coupon-code {
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+
+.coupon-copy-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.coupons-section__note {
+  margin-top: 1rem;
+  font-size: var(--fs-0);
+  color: var(--ink-3);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .coupons-grid { grid-template-columns: 1fr; }
+  .coupon-card__right { padding: 0.75rem; }
+  .coupon-copy-btn { min-width: 80px; }
+}

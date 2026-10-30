@@ -1,0 +1,27 @@
+// Environment for the automated tests. Runs before any test file is loaded,
+// so the suite never depends on (or touches) a developer's .env file.
+// External services are mocked in tests/setup.js; the values here are dummies.
+Object.assign(process.env, {
+  NODE_ENV: 'test',
+  PORT: '5099',
+  CLIENT_URLS: 'http://localhost:5173',
+  MONGODB_URI: 'mongodb://127.0.0.1:27017/unused-in-tests',
+  FIREBASE_PROJECT_ID: 'test-project',
+  FIREBASE_CLIENT_EMAIL: '',
+  FIREBASE_PRIVATE_KEY: '',
+  FIREBASE_AUTH_EMULATOR_HOST: '',
+  RAZORPAY_KEY_ID: 'rzp_test_dummy',
+  RAZORPAY_KEY_SECRET: 'dummy-secret',
+  RAZORPAY_WEBHOOK_SECRET: 'dummy-webhook-secret',
+  CLOUDINARY_CLOUD_NAME: '',
+  CLOUDINARY_API_KEY: '',
+  CLOUDINARY_API_SECRET: '',
+  ADMIN_EMAILS: 'owner@example.com',
+  SUPER_ADMIN_EMAILS: 'founder@example.com',
+  ENABLE_COD: 'true',
+  FREE_DELIVERY_ABOVE: '10000',
+  DELIVERY_CHARGE: '500',
+  GST_INCLUSIVE: 'true',
+  GST_PERCENT: '18',
+  SMTP_HOST: '',
+});

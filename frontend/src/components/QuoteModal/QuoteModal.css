@@ -1,0 +1,22 @@
+.modal { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 1rem; background: rgba(8, 28, 44, 0.62); animation: fade 0.2s; overflow-y: auto; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+.modal__panel { width: min(640px, 100%); background: var(--surface); border-radius: var(--r-2); padding: clamp(1.25rem, 4vw, 2rem); animation: page-in 0.3s var(--ease); margin-block: auto; }
+.modal__head { display: flex; justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+.modal__head h2 { font-size: var(--fs-4); margin-bottom: 0.35rem; }
+.modal__close { width: 40px; height: 40px; flex: none; display: grid; place-items: center; border-radius: 50%; margin: -6px -6px 0 0; }
+.modal__close:hover { background: var(--paper); }
+.modal__product { display: flex; align-items: center; gap: 0.9rem; padding: 0.6rem; margin-bottom: 1.25rem; background: var(--paper); border-radius: var(--r-1); }
+.modal__product img { width: 54px; height: 54px; object-fit: contain; background: var(--tile); padding: 4px; border-radius: var(--r-1); }
+.modal__product strong { display: block; font-stretch: 112%; font-size: var(--fs-2); }
+
+.quote-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0.9rem 1rem; }
+.quote-form__wide { grid-column: 1 / -1; }
+.quote-done { text-align: center; padding: 1.5rem 0 0.5rem; display: grid; gap: 0.75rem; justify-items: center; }
+.quote-done__icon { width: 56px; height: 56px; display: grid; place-items: center; border-radius: 50%; background: var(--ok); color: #fff; }
+.quote-done h3 { max-width: 24ch; font-size: var(--fs-3); }
+.quote-done .btn { margin-top: 0.5rem; }
+@media (max-width: 520px) {
+  .quote-form { grid-template-columns: 1fr; }
+  .modal { padding: 0; place-items: end stretch; }
+  .modal__panel { border-radius: var(--r-2) var(--r-2) 0 0; max-height: 94vh; overflow-y: auto; margin-block: 0; align-self: end; }
+}

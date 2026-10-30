@@ -1,0 +1,471 @@
+### Sahajanand Electronics API — HTTP Requests
+### Base URL: http://localhost:5000/api
+### Replace {{TOKEN}} with a valid Firebase ID token
+### Replace {{ADMIN_TOKEN}} with an admin user's token
+
+# ─── Health ──────────────────────────────────────────────
+
+### Health Check
+GET http://localhost:5000/api/health
+
+# ─── Auth ────────────────────────────────────────────────
+
+### Login (Firebase token in header)
+POST http://localhost:5000/api/auth/login
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{}
+
+### Get Current User
+GET http://localhost:5000/api/auth/me
+Authorization: Bearer {{TOKEN}}
+
+### Logout
+POST http://localhost:5000/api/auth/logout
+Authorization: Bearer {{TOKEN}}
+
+# ─── Users ───────────────────────────────────────────────
+
+### Get Profile
+GET http://localhost:5000/api/users/profile
+Authorization: Bearer {{TOKEN}}
+
+### Update Profile
+PUT http://localhost:5000/api/users/profile
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "name": "Updated Name",
+  "phone": "9876543210"
+}
+
+# ─── Categories ──────────────────────────────────────────
+
+### List Categories
+GET http://localhost:5000/api/categories
+
+### Get Category by Slug
+GET http://localhost:5000/api/categories/refrigerators
+
+# ─── Products ────────────────────────────────────────────
+
+### List Products (with filters)
+GET http://localhost:5000/api/products?page=1&limit=12&sort=newest
+
+### Search Products
+GET http://localhost:5000/api/products?search=samsung
+
+### Filter by Category
+GET http://localhost:5000/api/products?category=refrigerators
+
+### Filter by Price Range
+GET http://localhost:5000/api/products?minPrice=10000&maxPrice=30000
+
+### Filter In-Stock + Featured
+GET http://localhost:5000/api/products?inStock=true&featured=true
+
+### Featured Products
+GET http://localhost:5000/api/products/featured
+
+### New Arrivals
+GET http://localhost:5000/api/products/new-arrivals
+
+### Get Brands
+GET http://localhost:5000/api/products/brands
+
+### Get Product by Slug
+GET http://localhost:5000/api/products/samsung-253l-double-door-frost-free-refrigerator
+
+# ─── Addresses ───────────────────────────────────────────
+
+### List Addresses
+GET http://localhost:5000/api/addresses
+Authorization: Bearer {{TOKEN}}
+
+### Create Address
+POST http://localhost:5000/api/addresses
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "fullName": "Denish Patel",
+  "phone": "9876543210",
+  "line1": "123 Main Street",
+  "line2": "Near City Mall",
+  "landmark": "Opposite Park",
+  "city": "Ahmedabad",
+  "state": "Gujarat",
+  "pincode": "380001",
+  "type": "home",
+  "isDefault": true
+}
+
+### Update Address
+PUT http://localhost:5000/api/addresses/{{ADDRESS_ID}}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "fullName": "Updated Name",
+  "phone": "9123456789"
+}
+
+### Set Default Address
+PATCH http://localhost:5000/api/addresses/{{ADDRESS_ID}}/default
+Authorization: Bearer {{TOKEN}}
+
+### Delete Address
+DELETE http://localhost:5000/api/addresses/{{ADDRESS_ID}}
+Authorization: Bearer {{TOKEN}}
+
+# ─── Cart ────────────────────────────────────────────────
+
+### Get Cart
+GET http://localhost:5000/api/cart
+Authorization: Bearer {{TOKEN}}
+
+### Add to Cart
+POST http://localhost:5000/api/cart/items
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "productId": "{{PRODUCT_ID}}",
+  "quantity": 1
+}
+
+### Update Cart Item Quantity
+PUT http://localhost:5000/api/cart/items/{{PRODUCT_ID}}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+### Remove Cart Item
+DELETE http://localhost:5000/api/cart/items/{{PRODUCT_ID}}
+Authorization: Bearer {{TOKEN}}
+
+### Clear Cart
+DELETE http://localhost:5000/api/cart
+Authorization: Bearer {{TOKEN}}
+
+### Merge Guest Cart
+POST http://localhost:5000/api/cart/merge
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "items": [
+    { "productId": "{{PRODUCT_ID}}", "quantity": 2 }
+  ]
+}
+
+# ─── Wishlist ────────────────────────────────────────────
+
+### Get Wishlist
+GET http://localhost:5000/api/wishlist
+Authorization: Bearer {{TOKEN}}
+
+### Add to Wishlist
+POST http://localhost:5000/api/wishlist/{{PRODUCT_ID}}
+Authorization: Bearer {{TOKEN}}
+
+### Remove from Wishlist
+DELETE http://localhost:5000/api/wishlist/{{PRODUCT_ID}}
+Authorization: Bearer {{TOKEN}}
+
+# ─── Coupons ─────────────────────────────────────────────
+
+### Validate Coupon
+POST http://localhost:5000/api/coupons/validate
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "code": "WELCOME10",
+  "itemsTotal": 15000
+}
+
+# ─── Reviews ─────────────────────────────────────────────
+
+### Get Product Reviews
+GET http://localhost:5000/api/reviews/product/{{PRODUCT_ID}}?page=1
+
+### Create Review
+POST http://localhost:5000/api/reviews/product/{{PRODUCT_ID}}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "rating": 5,
+  "title": "Excellent product!",
+  "comment": "Great value for money. Works perfectly."
+}
+
+### Update Review
+PUT http://localhost:5000/api/reviews/{{REVIEW_ID}}
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "rating": 4,
+  "comment": "Updated review text"
+}
+
+### Delete Review
+DELETE http://localhost:5000/api/reviews/{{REVIEW_ID}}
+Authorization: Bearer {{TOKEN}}
+
+# ─── Orders ──────────────────────────────────────────────
+
+### Checkout (COD, from cart)
+POST http://localhost:5000/api/orders/checkout
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "addressId": "{{ADDRESS_ID}}",
+  "paymentMethod": "cod"
+}
+
+### Checkout (Razorpay, buy now)
+POST http://localhost:5000/api/orders/checkout
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "addressId": "{{ADDRESS_ID}}",
+  "paymentMethod": "razorpay",
+  "items": [
+    { "productId": "{{PRODUCT_ID}}", "quantity": 1 }
+  ],
+  "couponCode": "WELCOME10"
+}
+
+### My Orders
+GET http://localhost:5000/api/orders/my?page=1
+Authorization: Bearer {{TOKEN}}
+
+### Get Order
+GET http://localhost:5000/api/orders/{{ORDER_ID}}
+Authorization: Bearer {{TOKEN}}
+
+### Cancel Order
+POST http://localhost:5000/api/orders/{{ORDER_ID}}/cancel
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "reason": "Changed my mind"
+}
+
+### Get Invoice
+GET http://localhost:5000/api/orders/{{ORDER_ID}}/invoice
+Authorization: Bearer {{TOKEN}}
+
+# ─── Payments ────────────────────────────────────────────
+
+### Verify Payment
+POST http://localhost:5000/api/payments/verify
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "razorpay_order_id": "order_xxx",
+  "razorpay_payment_id": "pay_xxx",
+  "razorpay_signature": "sig_xxx"
+}
+
+### Report Payment Failure
+POST http://localhost:5000/api/payments/failed
+Authorization: Bearer {{TOKEN}}
+Content-Type: application/json
+
+{
+  "razorpay_order_id": "order_xxx"
+}
+
+### Retry Payment
+POST http://localhost:5000/api/payments/retry/{{ORDER_ID}}
+Authorization: Bearer {{TOKEN}}
+
+# ─── Admin: Dashboard ────────────────────────────────────
+
+### Dashboard Stats
+GET http://localhost:5000/api/admin/dashboard
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+# ─── Admin: Products ─────────────────────────────────────
+
+### List Products (admin)
+GET http://localhost:5000/api/admin/products?page=1&limit=20
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### Create Product
+POST http://localhost:5000/api/admin/products
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "name": "New Electronic Item",
+  "category": "{{CATEGORY_ID}}",
+  "price": 15000,
+  "mrp": 19000,
+  "stock": 25,
+  "brand": "TestBrand",
+  "description": "A detailed description",
+  "features": ["Feature 1", "Feature 2"],
+  "tags": ["electronics", "new"],
+  "isFeatured": true
+}
+
+### Update Product
+PUT http://localhost:5000/api/admin/products/{{PRODUCT_ID}}
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "price": 14000,
+  "stock": 30
+}
+
+### Update Stock
+PATCH http://localhost:5000/api/admin/products/{{PRODUCT_ID}}/stock
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "stock": 50
+}
+
+### Toggle Product Active
+PATCH http://localhost:5000/api/admin/products/{{PRODUCT_ID}}/toggle
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### Delete Product
+DELETE http://localhost:5000/api/admin/products/{{PRODUCT_ID}}
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+# ─── Admin: Orders ───────────────────────────────────────
+
+### List Orders (with filters)
+GET http://localhost:5000/api/admin/orders?status=placed&page=1
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### Update Order Status
+PATCH http://localhost:5000/api/admin/orders/{{ORDER_ID}}/status
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "status": "confirmed",
+  "note": "Order verified and confirmed"
+}
+
+### Ship Order
+PATCH http://localhost:5000/api/admin/orders/{{ORDER_ID}}/status
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "status": "shipped",
+  "trackingId": "TRACK123456",
+  "courierName": "Delhivery"
+}
+
+### Mark COD as Paid
+PATCH http://localhost:5000/api/admin/orders/{{ORDER_ID}}/payment-status
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "paymentStatus": "paid"
+}
+
+### Refund Order
+POST http://localhost:5000/api/admin/orders/{{ORDER_ID}}/refund
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "amount": 0
+}
+
+# ─── Admin: Users ────────────────────────────────────────
+
+### List Users
+GET http://localhost:5000/api/admin/users?page=1&search=test
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### Get User Detail
+GET http://localhost:5000/api/admin/users/{{USER_ID}}
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### Change User Role
+PATCH http://localhost:5000/api/admin/users/{{USER_ID}}/role
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "role": "admin"
+}
+
+### Deactivate User
+PATCH http://localhost:5000/api/admin/users/{{USER_ID}}/status
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "isActive": false
+}
+
+# ─── Admin: Coupons ──────────────────────────────────────
+
+### List Coupons
+GET http://localhost:5000/api/admin/coupons
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### Create Coupon
+POST http://localhost:5000/api/admin/coupons
+Authorization: Bearer {{ADMIN_TOKEN}}
+Content-Type: application/json
+
+{
+  "code": "NEWCOUPON20",
+  "description": "20% off on all orders",
+  "discountType": "percent",
+  "discountValue": 20,
+  "maxDiscount": 3000,
+  "minOrderValue": 5000,
+  "usageLimit": 100,
+  "perUserLimit": 1,
+  "expiresAt": "2027-12-31T23:59:59Z"
+}
+
+### Delete Coupon
+DELETE http://localhost:5000/api/admin/coupons/{{COUPON_ID}}
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+# ─── Admin: Reviews ──────────────────────────────────────
+
+### List All Reviews
+GET http://localhost:5000/api/admin/reviews?page=1
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### Toggle Review Approval
+PATCH http://localhost:5000/api/admin/reviews/{{REVIEW_ID}}/approve
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+### Delete Review
+DELETE http://localhost:5000/api/admin/reviews/{{REVIEW_ID}}
+Authorization: Bearer {{ADMIN_TOKEN}}
+
+# ─── Admin: Payments ─────────────────────────────────────
+
+### List Payments
+GET http://localhost:5000/api/admin/payments?page=1
+Authorization: Bearer {{ADMIN_TOKEN}}

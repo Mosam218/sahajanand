@@ -1,0 +1,14 @@
+.tray { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--ink); color: #fff; animation: tray-in 0.3s var(--ease); }
+@keyframes tray-in { from { transform: translateY(100%); } to { transform: none; } }
+.tray__in { display: flex; align-items: center; gap: 1rem; min-height: 64px; padding-block: 0.6rem; }
+.tray__label { font-size: var(--fs-0); white-space: nowrap; }
+.tray__items { display: flex; gap: 0.5rem; flex: 1; overflow-x: auto; }
+.tray__items li { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.4rem 0.25rem 0.3rem; background: rgba(255, 255, 255, 0.1); border-radius: var(--r-1); font-weight: 600; font-size: var(--fs-0); white-space: nowrap; }
+.tray__items img { width: 34px; height: 34px; object-fit: contain; background: var(--tile); border-radius: 2px; padding: 3px; }
+.tray__items button { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; }
+.tray__items button:hover { background: rgba(255, 255, 255, 0.2); }
+.tray__clear { font-size: var(--fs-0); text-decoration: underline; }
+.tray__hint { font-size: var(--fs-0); color: rgba(255, 255, 255, 0.7); white-space: nowrap; }
+.toast { position: fixed; left: 50%; bottom: 84px; transform: translateX(-50%); z-index: 90; pointer-events: none; }
+.toast p { background: var(--ink); color: #fff; padding: 0.7rem 1rem; border-radius: var(--r-1); font-size: var(--fs-0); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); max-width: 90vw; }
+@media (max-width: 640px) { .tray__label, .tray__items span { display: none; } }

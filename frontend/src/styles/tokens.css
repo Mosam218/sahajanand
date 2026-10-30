@@ -1,0 +1,47 @@
+/* Design system. Change the brand here; components only read these variables. */
+:root {
+  /* Neutrals: cool, steel-tinted */
+  --paper: #f1f4f6;
+  --surface: #ffffff;
+  --tile: #e4e9ed;      /* product photo background */
+  --tile-2: #d9e0e5;
+  --line: #d3dbe1;
+  --ink: #11212d;
+  --ink-2: #455561;
+  --ink-3: #6b7a86;
+
+  /* Brand */
+  --deep: #0a2f4b;      /* cold-room blue: hero, footer, dark bands */
+  --deep-2: #123f61;
+  --accent: #d9480f;    /* controller orange: primary actions only */
+  --accent-hover: #b93a08;
+  --on-accent: #ffffff;
+
+  /* Temperature semantics */
+  --t-ultra: #4b3fa8;
+  --t-freezer: #1668a8;
+  --t-chiller: #1f9aa3;
+  --t-dual: #5a6b7a;
+  --t-heated: #d9480f;
+
+  --ok: #1d7a4d;
+  --error: #b3261e;
+
+  /* Type */
+  --font: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --fs-0: 0.8125rem;
+  --fs-1: 0.9375rem;
+  --fs-2: 1.0625rem;
+  --fs-3: 1.3125rem;
+  --fs-4: 1.75rem;
+  --fs-5: clamp(2rem, 1.3rem + 2.4vw, 3rem);
+  --fs-6: clamp(2.6rem, 1.2rem + 5vw, 5.25rem);
+
+  /* Space and shape */
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --max: 1320px;
+  --section: clamp(3.5rem, 8vw, 6.5rem);
+  --r-1: 3px;
+  --r-2: 6px;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

@@ -1,0 +1,15 @@
+.tscale { --c: var(--t-chiller); }
+.tscale[data-class='ultra'] { --c: var(--t-ultra); }
+.tscale[data-class='freezer'] { --c: var(--t-freezer); }
+.tscale[data-class='dual'] { --c: var(--t-dual); }
+.tscale[data-class='heated'] { --c: var(--t-heated); }
+.tscale__track { position: relative; height: 4px; background: var(--tile-2); border-radius: 2px; }
+.tscale__zero { position: absolute; top: -3px; width: 1px; height: 10px; background: var(--ink-3); }
+.tscale__range { position: absolute; top: 0; height: 100%; background: var(--c); border-radius: 2px; }
+.tscale--detailed .tscale__track { height: 8px; border-radius: 4px; }
+.tscale--detailed .tscale__range { border-radius: 4px; }
+.tscale--detailed .tscale__zero { top: -4px; height: 16px; }
+.tscale__ticks { position: relative; height: 1.4rem; margin-top: 0.5rem; font-size: 0.75rem; color: var(--ink-3); }
+.tscale__ticks span { position: absolute; transform: translateX(-50%); }
+.tscale__ticks span:first-child { transform: none; }
+.tscale__ticks span:last-child { transform: translateX(-100%); }
