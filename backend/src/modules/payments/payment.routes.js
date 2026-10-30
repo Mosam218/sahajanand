@@ -8,6 +8,10 @@ const { verifyPaymentSchema, paymentFailedSchema } = require('./payment.validati
 const router = Router();
 
 // Webhook is mounted separately in app.js with express.raw()
+// Standard Razorpay routes
+router.post('/create-order', paymentLimiter, paymentController.createOrder);
+router.post('/verify-payment', paymentLimiter, paymentController.verifyPaymentSignature);
+
 // These routes need auth
 router.post(
   '/verify',

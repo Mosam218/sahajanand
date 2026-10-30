@@ -2,7 +2,8 @@ const dotenv = require('dotenv');
 const path = require('path');
 const { z } = require('zod');
 
-// Load .env from project root
+// Load .env from backend and project root
+dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') });
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
 
 const bool = (def) =>
@@ -83,7 +84,7 @@ const envSchema = z
         });
       }
     };
-    allOrNone(['RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET', 'RAZORPAY_WEBHOOK_SECRET'], 'Razorpay');
+    allOrNone(['RAZORPAY_KEY_ID', 'RAZORPAY_KEY_SECRET'], 'Razorpay');
     allOrNone(['CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'], 'Cloudinary');
   });
 

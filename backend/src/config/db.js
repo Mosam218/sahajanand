@@ -18,8 +18,9 @@ async function connectDB() {
     return mongoose;
   }
 
-  const MAX_RETRIES = 3;
-  const RETRY_DELAY_MS = 5000;
+  const serverless = Boolean(process.env.VERCEL);
+  const MAX_RETRIES = serverless ? 2 : 3;
+  const RETRY_DELAY_MS = serverless ? 500 : 5000;
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
@@ -46,8 +47,7 @@ async function connectDB() {
         `MongoDB connection attempt ${attempt}/${MAX_RETRIES} failed: ${err.message}`
       );
       if (attempt === MAX_RETRIES) {
-        logger.error('All MongoDB connection attempts failed. Exiting.');
-        process.exit(1);
+        throw new Error(`MongoDB connection failed: ${err.message}`);
       }
       await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS));
     }

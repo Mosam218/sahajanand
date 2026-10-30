@@ -125,7 +125,19 @@ export const api = {
   myOrders: (page = 1) => paged(get('/orders/my', { page, limit: 10 }), 'orders'),
   order: (id) => data(get(`/orders/${id}`)).then((d) => d.order),
   cancelOrder: (id, reason) => data(post(`/orders/${id}/cancel`, { reason })).then((d) => d.order),
-  verifyPayment: (body) => data(post('/payments/verify', body)).then((d) => d.order),
+  createOrder: (body) => request('/create-order', { method: 'POST', body, authed: false }),
+  verifyPayment: async (body) => {
+    try {
+      const res = await post('/payments/verify', body);
+      return res.data?.order || res.data || res;
+    } catch (err) {
+      if (err.status === 401 || err.status === 404) {
+        return request('/verify-payment', { method: 'POST', body, authed: false });
+      }
+      throw err;
+    }
+  },
+  verifyPaymentSignature: (body) => request('/verify-payment', { method: 'POST', body, authed: false }),
   paymentFailed: (razorpayOrderId) => post('/payments/failed', { razorpay_order_id: razorpayOrderId }),
   retryPayment: (orderId) => data(post(`/payments/retry/${orderId}`)),
 

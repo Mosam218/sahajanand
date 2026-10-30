@@ -16,6 +16,7 @@ const adminRoutes = require('../modules/admin/admin.routes');
 const enquiryRoutes = require('../modules/enquiries/enquiry.routes');
 const bannerRoutes = require('../modules/banners/banner.routes');
 const settingsRoutes = require('../modules/settings/settings.routes');
+const paymentController = require('../modules/payments/payment.controller');
 
 const router = Router();
 
@@ -49,5 +50,9 @@ router.use('/enquiries', enquiryRoutes);
 router.use('/banners', bannerRoutes);
 router.use('/settings', settingsRoutes);
 router.use('/admin', adminRoutes);
+
+// Razorpay Standard Checkout endpoints (POST /api/create-order & POST /api/verify-payment)
+router.post('/create-order', paymentController.createOrder);
+router.post('/verify-payment', paymentController.verifyPaymentSignature);
 
 module.exports = router;

@@ -18,8 +18,13 @@ const logger = winston.createLogger({
   ],
 });
 
-// Add file transport in production
-if (process.env.NODE_ENV === 'production') {
+// File logs are for a normal server with a writable disk. On Vercel the
+// filesystem is read-only, and the file transport creates its directory
+// while this module loads — that throws and the function dies before it
+// can send a response (FUNCTION_INVOCATION_FAILED, which the browser
+// reports as a CORS error). Vercel already keeps the console output.
+const serverless = Boolean(process.env.VERCEL);
+if (process.env.NODE_ENV === 'production' && !serverless) {
   logger.add(
     new winston.transports.File({
       filename: 'logs/error.log',

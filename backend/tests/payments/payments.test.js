@@ -231,4 +231,100 @@ describe('Payments Module', () => {
       expect(stockAfterSecond).toBe(stockAfterFirst);
     });
   });
+
+  describe('POST /api/create-order', () => {
+    it('should reject when amount is less than 100 paise', async () => {
+      const res = await request(app)
+        .post('/api/create-order')
+        .send({ amount: 50, currency: 'INR' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('should reject when auth token is invalid', async () => {
+      firebaseService.verifyIdToken.mockRejectedValueOnce(new Error('Invalid token'));
+
+      const res = await request(app)
+        .post('/api/create-order')
+        .set('Authorization', 'Bearer invalid-token')
+        .send({ amount: 500, currency: 'INR' });
+
+      expect(res.status).toBe(401);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('should return 500 when Razorpay order creation fails', async () => {
+      razorpayService.createOrder.mockRejectedValueOnce(new Error('Razorpay API failure'));
+
+      const res = await request(app)
+        .post('/api/create-order')
+        .send({ amount: 50000, currency: 'INR' });
+
+      expect(res.status).toBe(500);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('should create order and return order_id, amount, and currency', async () => {
+      razorpayService.createOrder.mockResolvedValueOnce({
+        id: 'order_std_123',
+        amount: 50000,
+        currency: 'INR',
+        receipt: 'rcpt_1',
+      });
+
+      const res = await request(app)
+        .post('/api/create-order')
+        .send({ amount: 50000, currency: 'INR', receipt: 'rcpt_1' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.order_id).toBe('order_std_123');
+      expect(res.body.amount).toBe(50000);
+      expect(res.body.currency).toBe('INR');
+    });
+  });
+
+  describe('POST /api/verify-payment', () => {
+    it('should return 400 when required fields are missing', async () => {
+      const res = await request(app)
+        .post('/api/verify-payment')
+        .send({ order_id: 'order_123' });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('should return 400 when signature does not match', async () => {
+      razorpayService.verifySignature.mockReturnValue(false);
+
+      const res = await request(app)
+        .post('/api/verify-payment')
+        .send({
+          order_id: 'order_123',
+          payment_id: 'pay_123',
+          signature: 'mismatched_sig',
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body.success).toBe(false);
+    });
+
+    it('should return 200 when signature matches', async () => {
+      razorpayService.verifySignature.mockReturnValue(true);
+
+      const res = await request(app)
+        .post('/api/verify-payment')
+        .send({
+          order_id: 'order_rzp_test_123',
+          payment_id: 'pay_rzp_test_456',
+          signature: 'valid_sig',
+        });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.order_id).toBe('order_rzp_test_123');
+      expect(res.body.payment_id).toBe('pay_rzp_test_456');
+    });
+  });
 });

@@ -87,6 +87,10 @@ if (!config.isTest) {
 app.use((req, res, next) => (req.path === '/api/health' ? next() : globalLimiter(req, res, next)));
 app.use('/api', routes);
 
+// Top-level endpoints for standard checkout callers
+app.post('/create-order', paymentController.createOrder);
+app.post('/verify-payment', paymentController.verifyPaymentSignature);
+
 // 9. 404 + error handler (must be last)
 app.use(notFoundHandler);
 app.use(errorHandler);

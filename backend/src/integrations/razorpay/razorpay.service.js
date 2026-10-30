@@ -14,15 +14,16 @@ function assertConfigured() {
  * Create a Razorpay order.
  * @param {object} params
  * @param {number} params.amount - Amount in paise
+ * @param {string} [params.currency='INR'] - Currency code
  * @param {string} params.receipt - Unique receipt/order number
  * @param {object} [params.notes] - Additional notes
  * @returns {Promise<object>} Razorpay order object
  */
-async function createOrder({ amount, receipt, notes = {} }) {
+async function createOrder({ amount, currency = 'INR', receipt, notes = {} }) {
   assertConfigured();
   const order = await razorpay.orders.create({
     amount,
-    currency: 'INR',
+    currency,
     receipt,
     notes,
   });
