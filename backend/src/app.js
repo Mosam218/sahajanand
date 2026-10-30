@@ -8,6 +8,7 @@ const morgan = require('morgan');
 const path = require('path');
 
 const config = require('./config/env');
+const { connectDB } = require('./config/db');
 const routes = require('./routes');
 const paymentController = require('./modules/payments/payment.controller');
 const { globalLimiter } = require('./middleware/rateLimit.middleware');
@@ -44,6 +45,21 @@ const corsOptions = {
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Razorpay-Signature'],
 };
 app.use(cors(corsOptions));
+
+// Database. Done inside the request so a serverless host waits for the
+// response. A failure is returned as JSON instead of killing the process.
+app.use((req, res, next) => {
+  connectDB()
+    .then(() => next())
+    .catch((err) => {
+      console.error(err);
+      if (res.headersSent) return next(err);
+      res.status(500).json({
+        success: false,
+        message: err.message || 'Database connection failed',
+      });
+    });
+});
 
 // 4. Razorpay webhook — MUST be before express.json() to receive raw body
 app.post(

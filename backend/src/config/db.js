@@ -19,13 +19,16 @@ async function connectDB() {
   }
 
   const serverless = Boolean(process.env.VERCEL);
-  const MAX_RETRIES = serverless ? 2 : 3;
-  const RETRY_DELAY_MS = serverless ? 500 : 5000;
+  const MAX_RETRIES = serverless ? 1 : 3;
+  const RETRY_DELAY_MS = serverless ? 0 : 5000;
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
       const conn = await mongoose.connect(config.mongo.uri, {
         maxPoolSize: 10,
+        // Default selection wait is 30s, which Vercel kills first and reports
+        // as a failed function with no message.
+        serverSelectionTimeoutMS: serverless ? 8000 : 30000,
       });
 
       isConnected = true;

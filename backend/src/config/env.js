@@ -94,8 +94,12 @@ if (!parsed.success) {
   const errors = parsed.error.issues.map(
     (issue) => `  ✗ ${issue.path.join('.')}: ${issue.message}`
   );
-  console.error('❌ Environment validation failed:\n' + errors.join('\n'));
+  const message = `Environment validation failed:\n${errors.join('\n')}`;
+  console.error(`❌ ${message}`);
   console.error('\nPlease check your .env file. See .env.example for reference.');
+  // On Vercel, exiting here becomes FUNCTION_INVOCATION_FAILED and hides the
+  // reason. Throw so the request handler can print it.
+  if (process.env.VERCEL) throw new Error(message);
   process.exit(1);
 }
 
