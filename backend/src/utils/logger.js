@@ -25,21 +25,26 @@ const logger = winston.createLogger({
 // reports as a CORS error). Vercel already keeps the console output.
 const serverless = Boolean(process.env.VERCEL);
 if (process.env.NODE_ENV === 'production' && !serverless) {
-  logger.add(
-    new winston.transports.File({
-      filename: 'logs/error.log',
-      level: 'error',
-      maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    })
-  );
-  logger.add(
-    new winston.transports.File({
-      filename: 'logs/combined.log',
-      maxsize: 5242880,
-      maxFiles: 5,
-    })
-  );
+  try {
+    logger.add(
+      new winston.transports.File({
+        filename: 'logs/error.log',
+        level: 'error',
+        maxsize: 5242880, // 5MB
+        maxFiles: 5,
+      })
+    );
+    logger.add(
+      new winston.transports.File({
+        filename: 'logs/combined.log',
+        maxsize: 5242880,
+        maxFiles: 5,
+      })
+    );
+  } catch (err) {
+    // A read-only disk must not stop the API from answering.
+    console.error('File logging disabled:', err.message);
+  }
 }
 
 /**
