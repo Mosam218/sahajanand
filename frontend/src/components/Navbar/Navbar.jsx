@@ -34,6 +34,44 @@ export default function Navbar() {
   const [mega, setMega] = useState(false);
   const [drawer, setDrawer] = useState(false);
   const megaRef = useRef(null);
+  const quickRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScroll = () => {
+    const el = quickRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    setCanScrollLeft(scrollLeft > 3);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 3);
+  };
+
+  useEffect(() => {
+    checkScroll();
+    const timeout = setTimeout(checkScroll, 150);
+    window.addEventListener('resize', checkScroll);
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('resize', checkScroll);
+    };
+  }, [categories]);
+
+  // Automatically scroll active category into view
+  useEffect(() => {
+    if (!quickRef.current) return;
+    const activeEl = quickRef.current.querySelector('a[aria-current="page"]');
+    if (activeEl) {
+      activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+    const timeout = setTimeout(checkScroll, 300);
+    return () => clearTimeout(timeout);
+  }, [pathname, categories]);
+
+  const scrollNav = (distance) => {
+    if (quickRef.current) {
+      quickRef.current.scrollBy({ left: distance, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => { setMega(false); setDrawer(false); setAcct(false); }, [pathname]);
   useEffect(() => {
@@ -120,13 +158,37 @@ export default function Navbar() {
           <button className="nav__products" aria-expanded={mega} aria-controls="mega" onClick={() => setMega((m) => !m)}>
             <Icon name="menu" size={18} /> Products <Icon name="down" size={16} />
           </button>
-          <ul className="nav__quick">
-            {categories.slice(0, 7).map((c) => (
-              <li key={c.slug}>
-                <Link to={`/category/${c.slug}`} aria-current={pathname === `/category/${c.slug}` ? 'page' : undefined}>{c.shortName}</Link>
-              </li>
-            ))}
-          </ul>
+          <div className="nav__quick-wrap">
+            {canScrollLeft && (
+              <button
+                type="button"
+                className="nav__scroll-btn nav__scroll-btn--left"
+                onClick={() => scrollNav(-240)}
+                aria-label="Scroll categories left"
+              >
+                <Icon name="left" size={14} />
+              </button>
+            )}
+            <ul className="nav__quick" ref={quickRef} onScroll={checkScroll}>
+              {categories.map((c) => (
+                <li key={c.slug}>
+                  <Link to={`/category/${c.slug}`} aria-current={pathname === `/category/${c.slug}` ? 'page' : undefined}>
+                    {c.shortName || c.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            {canScrollRight && (
+              <button
+                type="button"
+                className="nav__scroll-btn nav__scroll-btn--right"
+                onClick={() => scrollNav(240)}
+                aria-label="Scroll categories right"
+              >
+                <Icon name="right" size={14} />
+              </button>
+            )}
+          </div>
           <ul className="nav__links">
             {LINKS.map((l) => (
               <li key={l.to}><Link to={l.to} aria-current={pathname === l.to ? 'page' : undefined}>{l.label}</Link></li>
