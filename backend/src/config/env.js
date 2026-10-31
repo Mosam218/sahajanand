@@ -2,9 +2,9 @@ const dotenv = require('dotenv');
 const path = require('path');
 const { z } = require('zod');
 
-// Load .env from backend and project root
-dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') });
+// Load .env from backend (primary) and project root (fallback)
 dotenv.config({ path: path.join(__dirname, '..', '..', '.env') });
+dotenv.config({ path: path.join(__dirname, '..', '..', '..', '.env') });
 
 const bool = (def) =>
   z

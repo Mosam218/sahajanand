@@ -12,7 +12,6 @@ import './Checkout.css';
 
 const METHODS = [
   { key: 'razorpay', label: 'Pay online', hint: 'UPI, cards, net banking and wallets through Razorpay.' },
-  { key: 'cod', label: 'Pay on delivery', hint: 'Pay when your order is delivered.' },
 ];
 
 export default function Checkout() {

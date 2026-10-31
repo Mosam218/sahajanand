@@ -59,13 +59,27 @@ async function resolveItems(userId, bodyItems) {
     return bodyItems;
   }
 
-  // Load from cart
+  // Load from cart. Lines whose product was removed from the catalogue are
+  // dropped here. The cart screen already hides them, but leaving them in
+  // made checkout fail with "Product not found" before payment could start.
   const cart = await Cart.findOne({ user: userId });
   if (!cart || cart.items.length === 0) {
     throw ApiError.badRequest('Cart is empty');
   }
 
-  return cart.items.map((item) => ({
+  const ids = cart.items.map((item) => item.product);
+  const existing = await Product.find({ _id: { $in: ids } }).select('_id');
+  const found = new Set(existing.map((p) => p._id.toString()));
+  const kept = cart.items.filter((item) => found.has(item.product.toString()));
+  if (kept.length !== cart.items.length) {
+    cart.items = kept;
+    await cart.save();
+  }
+  if (kept.length === 0) {
+    throw ApiError.badRequest('Cart is empty');
+  }
+
+  return kept.map((item) => ({
     productId: item.product.toString(),
     quantity: item.quantity,
   }));
@@ -361,7 +375,8 @@ async function checkout(userId, body) {
     } catch (err) {
       // Do not leave an unpayable order behind
       await Order.findByIdAndDelete(order._id);
-      logger.error(`Razorpay order creation failed for ${order.orderNumber}: ${err.message || err}`);
+      const errMsg = err?.error?.description || err?.message || JSON.stringify(err);
+      logger.error(`Razorpay order creation failed for ${order.orderNumber}: ${errMsg}`);
       throw new ApiError(502, 'Could not start the online payment. Please try again or choose another payment method.');
     }
 

@@ -7,11 +7,11 @@ console.log('Testing Razorpay Configuration & Signature Verification...');
 // 1. Check config
 console.log('Razorpay Key ID:', config.razorpay.keyId);
 console.log('Razorpay Enabled:', config.razorpay.enabled);
-if (config.razorpay.keyId !== 'rzp_test_TtzSX11azWSSfk') {
+if (config.razorpay.keyId !== 'rzp_test_TuddiFNxOpZydO') {
   console.error('FAIL: Key ID does not match expected');
   process.exit(1);
 }
-if (config.razorpay.keySecret !== 'kBo4JG3vxg13eM2aeZ5IdRkl') {
+if (config.razorpay.keySecret !== 'dX4GHURfbZmcvN2wpFUwjsEG') {
   console.error('FAIL: Key Secret does not match expected');
   process.exit(1);
 }
